@@ -66,7 +66,7 @@ p7_flatten_list([X|XS], Result) :-
 
 p8_helper([], []).
 p8_helper([X], [X]).
-p8_helper([X|XS], Result) :- list_first(XS, First), 
+p8_helper([X|XS], Result) :- list_first(XS, First),
   (
     (X = First, p8_helper(XS, Result));
     (
@@ -209,4 +209,39 @@ p15_dupli([X|XS], N, Result) :-
   list_repeat(X, N, Dups),
   append(Dups, P, Result)
   .
+
+
+p16_([], _, _, []).
+p16_([X|XS], N, I, Result) :-
+  X is I mod N,
+  IS is I + 1,
+  p16_(XS, N, IS, P),
+  ((
+    X = 0,
+    append([], P, Result)
+  ),
+  (
+    append([X], P, Result)
+  ))
+  .
+
+p16(XS, N, Result) :- p16_(XS, N, 1, Result).
+
+
+p17_([X|XS], K, I, A, B) :-
+  ((
+    I = K,
+    append([X], [], A),
+    append(XS, [], B)
+  );
+  (
+    IS is I + 1,
+    p17_(XS, K, IS, P, Q),
+    append([X], P, A),
+    append(Q, [], B)
+  ))
+  .
+
+p17(XS, K, Result) :- p17_(XS, K, 1, A, B),
+  append([A,B], [], Result).
 
